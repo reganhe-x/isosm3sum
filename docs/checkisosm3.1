@@ -1,0 +1,26 @@
+.TH "CHECKISOSM3" "1"
+.SH "NAME"
+checkisosm3 \(em check an SM3 checksum implanted by \fBimplantisosm3\fR
+.SH "SYNOPSIS"
+.PP
+\fBcheckisosm3\fR [\fB\-\-sm3sumonly\fP]  [\fB\-\-verbose\fP]  [\fB\-\-gauge\fP]  [isofilename  | blockdevice ]
+.SH "DESCRIPTION"
+.PP
+This manual page documents briefly the \fBcheckisosm3\fR command.  \fBcheckisosm3\fR is a program that checks an embedded SM3 checksum in a ISO9660 image (.iso), or block device.  The checksum is embedded by the corresponding \fBimplantisosm3\fR command.
+.PP
+The check can be aborted by pressing Esc key.
+.SH "EXIT STATUS"
+.PP
+Program returns exit status 0 if the checksum is correct, 1 if the checksum is incorrect or non-existent, or 2 if the check was aborted.
+.SH "OPTIONS"
+.IP "\fB\-\-sm3sumonly\fP" 10
+Do not check the target.  Instead, output human-readable information about the target's checksums.
+.IP "\fB\-\-verbose\fP" 10
+Display human-readable progress as the target is checked.  Without this option, nothing is outputted except errors.
+.IP "\fB\-\-gauge\fP" 10
+Display a series of numbers from 0 to 100, corresponding to check progress.  This output can be piped to \fBdialog \-\-gauge\fR for a user-friendly progress bar.
+.SH "SEE ALSO"
+.PP
+implantisosm3 (1).
+.\" created by instant / docbook-to-man, Thu 07 Feb 2008, 13:43
+.\" modified by regan / docbook-to-man, Mon 11 Sep 2023, 20:09

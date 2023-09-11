@@ -1,0 +1,19 @@
+.TH "IMPLANTISOSM3" "1"
+.SH "NAME"
+implantisosm3 \(em implant an SM3 checksum in an ISO9660 image
+.SH "SYNOPSIS"
+.PP
+\fBimplantisosm3\fR [\fB\-\-force\fP]  [\fB\-\-supported-iso\fP]  [isofilename]
+.SH "DESCRIPTION"
+.PP
+This manual page documents briefly the \fBimplantisosm3\fR command. \fBimplantisosm3\fR is a program that embeds an SM3 checksum in an unused section of and ISO9660 (.iso) image.  This checksum can later be compared to the .iso, or a block device, using the corresponding \fBcheckisosm3\fR command.
+.SH "OPTIONS"
+.IP "\fB\-\-force\fP" 10
+Force an existing checksum to be overwritten.
+.IP "\fB\-\-supported-iso\fP" 10
+Indicate that the image will be written to a "supported" media, such as pressed CD.  On Red Hat-based Anaconda installers, this bypasses the prompt to check the CD.
+.SH "SEE ALSO"
+.PP
+checkisosm3 (1).
+.\" created by instant / docbook-to-man, Thu 07 Feb 2008, 12:11
+.\" modified by regan / docbook-to-man, Mon 11 Sep 2023, 20:09

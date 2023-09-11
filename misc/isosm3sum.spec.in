@@ -53,6 +53,8 @@ Python bindings for %{name}.
 %doc README.md
 %{_bindir}/checkisosm3
 %{_bindir}/implantisosm3
+%{_mandir}/man1/checkisosm3.1*
+%{_mandir}/man1/implantisosm3.1*
 
 %files devel
 %{_includedir}/libcheckisosm3.h

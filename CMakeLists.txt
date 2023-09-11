@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 project(isosm3sum)
 
 set(PROJECT_NAME "isosm3sum")
-set(PROJECT_VERSION "0.9.0")
+set(PROJECT_VERSION "1.0.0")
 
 set(CMAKE_C_FLAGS
     "${CMAKE_C_FLAGS} -std=gnu11 -Wall -D_GNU_SOURCE=1 -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE=1 -D_LARGEFILE64_SOURCE=1 -fPIC"
@@ -97,10 +97,16 @@ install(
     ARCHIVE DESTINATION ${LIBDIR})
 
 install(
-    DIRECTORY include/
+    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
     DESTINATION ${INCLUDEDIR}
     FILES_MATCHING
     PATTERN "lib*.h")
+
+install(
+    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/docs/
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/man/man1
+    FILES_MATCHING PATTERN "*.1"
+)
 
 configure_file(src/isosm3sum.pc.in ${CMAKE_BINARY_DIR}/isosm3sum.pc @ONLY)
 install(
