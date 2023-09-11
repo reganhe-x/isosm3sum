@@ -1,0 +1,9 @@
+includedir=/usr/@INCLUDEDIR@
+libdir=/usr/@LIBDIR@
+
+Name: isosm3sum
+Description: Utilities for working with sm3sum implanted in ISO images
+URL: https://github.com/reganhe-x/isosm3sum
+Version: @PROJECT_VERSION@
+Cflags: -I${includedir}
+Libs: -L${libdir}

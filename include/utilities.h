@@ -28,7 +28,7 @@ int getpagesize()
 /* The length of the SM3 digital digest is 512 bits, 64 bytes */
 #define HASH_SIZE 64
 /* Length in characters of string used for fragment sm3sum checking */
-#define FRAGMENT_SUM_SIZE 60UL
+#define FRAGMENT_SUM_SIZE 120UL
 /* FRAGMENT_COUNT must be an integral divisor or FRAGMENT_SUM_SIZE */
 /* 60 => 2, 3, 4, 5, 6, 10, 12, 15, 20, or 30 */
 #define FRAGMENT_COUNT 20UL

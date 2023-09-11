@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 project(isosm3sum)
 
 set(PROJECT_NAME "isosm3sum")
-set(PROJECT_VERSION "0.8.0")
+set(PROJECT_VERSION "0.9.0")
 
 set(CMAKE_C_FLAGS
     "${CMAKE_C_FLAGS} -std=gnu11 -Wall -D_GNU_SOURCE=1 -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE=1 -D_LARGEFILE64_SOURCE=1 -fPIC"
@@ -13,6 +13,14 @@ configure_file(include/config.h.in ${PROJECT_SOURCE_DIR}/include/config.h)
 
 set(CMAKE_SYSTEM_PREFIX_PATH "/usr")
 set(INCLUDEDIR "include")
+
+if(NOT DEFINED LIBDIR)
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "sw_64")
+        set(LIBDIR "lib")
+    else()
+        set(LIBDIR "lib64")
+    endif()
+endif()
 
 option(PYTHON_EXECUTABLE "Path to the Python executable" "")
 if(NOT PYTHON_EXECUTABLE)
@@ -74,3 +82,59 @@ install(
         GROUP_EXECUTE
         WORLD_READ
         WORLD_EXECUTE)
+
+install(
+    TARGETS checkisosm3-static implantisosm3-static
+    DESTINATION ${LIBDIR}
+    PERMISSIONS
+        OWNER_READ
+        OWNER_WRITE
+        OWNER_EXECUTE
+        GROUP_READ
+        GROUP_EXECUTE
+        WORLD_READ
+        WORLD_EXECUTE
+    ARCHIVE DESTINATION ${LIBDIR})
+
+install(
+    DIRECTORY include/
+    DESTINATION ${INCLUDEDIR}
+    FILES_MATCHING
+    PATTERN "lib*.h")
+
+configure_file(src/isosm3sum.pc.in ${CMAKE_BINARY_DIR}/isosm3sum.pc @ONLY)
+install(
+    FILES ${CMAKE_BINARY_DIR}/isosm3sum.pc
+    DESTINATION ${LIBDIR}/pkgconfig
+    PERMISSIONS
+        OWNER_READ
+        OWNER_WRITE
+        OWNER_EXECUTE
+        GROUP_READ
+        GROUP_EXECUTE
+        WORLD_READ
+        WORLD_EXECUTE)
+
+add_test(NAME testpyisosm3sum-large COMMAND ${PYTHON_EXECUTABLE} ${PROJECT_SOURCE_DIR}/test/testpyisosm3sum.py 200)
+add_test(NAME testpyisosm3sum-small COMMAND ${PYTHON_EXECUTABLE} ${PROJECT_SOURCE_DIR}/test/testpyisosm3sum.py)
+set_tests_properties(
+    testpyisosm3sum-large testpyisosm3sum-small
+    PROPERTIES ENVIRONMENT
+               "LD_LIBRARY_PATH=${CMAKE_BINARY_DIR}:${LD_LIBRARY_PATH};PYTHONPATH=${CMAKE_BINARY_DIR}:${PYTHONPATH}")
+enable_testing()
+
+add_custom_target(
+    archive
+    COMMAND git archive --format=tar --prefix=${PROJECT_NAME}-${PROJECT_VERSION}/ HEAD | bzip2 >
+            ${CMAKE_BINARY_DIR}/${PROJECT_NAME}-${PROJECT_VERSION}.tar.bz2
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+    COMMENT "Creating archive"
+    VERBATIM)
+
+configure_file(misc/isosm3sum.spec.in ${CMAKE_BINARY_DIR}/isosm3sum.spec)
+add_custom_target(
+    srpm
+    COMMAND make archive && bash ${PROJECT_SOURCE_DIR}/scripts/generate-srpm.sh
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    COMMENT "Creating source rpm"
+    VERBATIM)
