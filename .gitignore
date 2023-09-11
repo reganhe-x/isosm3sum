@@ -53,3 +53,4 @@ dkms.conf
 
 .cache
 build
+include/config.h

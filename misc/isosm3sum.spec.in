@@ -1,0 +1,69 @@
+%bcond_with     tests
+
+Name:           isosm3sum
+Version:        @PROJECT_VERSION@
+Release:        1%{?dist}
+Summary:        Utilities for working with sm3sum implanted in ISO images
+
+License:        GPL-2.0
+URL:            https://github.com/reganhe-x/%{name}
+Source0:        @PROJECT_NAME@-@PROJECT_VERSION@.tar.bz2
+
+BuildRequires:  cmake make gcc-c++ popt-devel pkgconfig(systemd)
+%if %{with tests}
+BuildRequires:  genisoimage
+%endif
+
+%description
+%{name} provides a way of making use of the ISO9660 application data
+area to store sm3sum data about the iso. This allows you to check the
+iso given nothing more than the iso itself.
+
+%package        devel
+Summary:        Development files for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description    devel
+Development files for %{name}.
+
+%package -n     python3-py%{name}
+Summary:        Python bindings for %{name}
+BuildRequires:  python3-devel
+
+%description -n python3-py%{name}
+Python bindings for %{name}.
+
+%prep
+%autosetup
+
+%build
+%cmake -G 'Unix Makefiles' -B build .
+%make_build -C build
+
+%if %{with tests}
+%check
+%make_build -C build test
+%endif
+
+%install
+%make_install -C build
+
+%files
+%license LICENSE
+%doc README.md
+%{_bindir}/checkisosm3
+%{_bindir}/implantisosm3
+
+%files devel
+%{_includedir}/libcheckisosm3.h
+%{_includedir}/libimplantisosm3.h
+%{_libdir}/libcheckisosm3-static.a
+%{_libdir}/libimplantisosm3-static.a
+%{_libdir}/pkgconfig/%{name}.pc
+
+%files -n python3-pyisosm3sum
+%license LICENSE
+%doc README.md
+%{python3_sitearch}/pyisosm3sum.so
+
+%changelog
